@@ -21,15 +21,36 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.auth.profile.ProfileCredentialsProvider;
+import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
+import com.amazonaws.services.dynamodbv2.document.ItemCollection;
 import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
+import com.amazonaws.services.dynamodbv2.document.QueryOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
+import com.amazonaws.services.dynamodbv2.document.spec.QuerySpec;
+import com.amazonaws.services.dynamodbv2.model.AttributeDefinition;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
+import com.amazonaws.services.dynamodbv2.model.Condition;
+import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
+import com.amazonaws.services.dynamodbv2.model.KeySchemaElement;
+import com.amazonaws.services.dynamodbv2.model.KeyType;
+import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
+import com.amazonaws.services.dynamodbv2.model.ScanRequest;
+import com.amazonaws.services.dynamodbv2.model.ScanResult;
 
-public class WriteToTable {
+public class SimpleWriteToTable {
 
     public static void main(String[] args) throws Exception {
     	//connect();
@@ -83,21 +104,23 @@ public class WriteToTable {
 	
 	public static void create() throws InterruptedException, SQLException
 	{
-		AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().withRegion("us-west-2").build();
+		AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().withRegion("us-east-2").build();
 		DynamoDB dynamoDB = new DynamoDB(client);
 
-		Table table = dynamoDB.getTable("Mateos_Table_Thing");
+		Table table = dynamoDB.getTable("Test1.2");
 		
 		// Build the item
 		Item item = new Item()
-		    .withPrimaryKey("Name", "chopper hat")
-		    .withNumber("Price", 30)
-		    .withString("Description", "cool thing to hug idk")
+		    .withPrimaryKey("Id", 1)
+		    .withString("name", "homie")
+		    .withNumber("Price", 32)
+		    .withString("Description", "he's a homie")
 		    .withString("Category", "comfort")
-		    .withString("Material", "cotton")
-		    .withBoolean("InStock", true)
-		    .withString("Genre", "anime")
-		    .withNumber("Rating", 9);
+		    .withString("Material", "unkown")
+		    .withBoolean("InStock",true)
+		    .withString("Genre", "n/a")
+		    .withNumber("Calories", 0)
+		    .withString("Image", "n/a");
 
 		// Write the item to the table
 		PutItemOutcome outcome = table.putItem(item);
