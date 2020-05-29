@@ -52,7 +52,7 @@ public class MoviesLoadDataToTable {
 
         DynamoDB dynamoDB = new DynamoDB(client);
 
-        Table table = dynamoDB.getTable("Movies");
+        Table table = dynamoDB.getTable("MoviesMateo");
 
         JsonParser parser = new JsonFactory().createParser(new File("moviedata.json"));
 

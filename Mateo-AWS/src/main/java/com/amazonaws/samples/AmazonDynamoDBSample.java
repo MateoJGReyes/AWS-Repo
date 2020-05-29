@@ -99,12 +99,12 @@ public class AmazonDynamoDBSample {
         init();
 
         try {
-            String tableName = "my-favorite-movies-table";
+            String tableName = "ThingMateo";
 
             // Create a table with a primary hash key named 'name', which holds a string
             CreateTableRequest createTableRequest = new CreateTableRequest().withTableName(tableName)
-                .withKeySchema(new KeySchemaElement().withAttributeName("name").withKeyType(KeyType.HASH))
-                .withAttributeDefinitions(new AttributeDefinition().withAttributeName("name").withAttributeType(ScalarAttributeType.S))
+                .withKeySchema(new KeySchemaElement().withAttributeName("Language").withKeyType(KeyType.HASH))
+                .withAttributeDefinitions(new AttributeDefinition().withAttributeName("Language").withAttributeType(ScalarAttributeType.S))
                 .withProvisionedThroughput(new ProvisionedThroughput().withReadCapacityUnits(1L).withWriteCapacityUnits(1L));
 
             // Create table if it does not exist yet
@@ -118,17 +118,22 @@ public class AmazonDynamoDBSample {
             System.out.println("Table Description: " + tableDescription);
 
             // Add an item
-            Map<String, AttributeValue> item = newItem("Bill & Ted's Excellent Adventure", 1989, "****", "James", "Sara");
+            Map<String, AttributeValue> item = newItem("Tagalog", 4, "Verb Subject Object", "Umiinom ako ng tubig");
             PutItemRequest putItemRequest = new PutItemRequest(tableName, item);
             PutItemResult putItemResult = dynamoDB.putItem(putItemRequest);
             System.out.println("Result: " + putItemResult);
 
             // Add another item
-            item = newItem("Airplane", 1980, "*****", "James", "Billy Bob");
+            item = newItem("Spanish", 1, "Subject Verb Object", "Yo estaba escuchando musica");
             putItemRequest = new PutItemRequest(tableName, item);
             putItemResult = dynamoDB.putItem(putItemRequest);
             System.out.println("Result: " + putItemResult);
-
+            
+            item = newItem("Japanese", 5, "Subject Object Verb", "éÑÇÕéıéiÇêHÇ◊ÇƒÇ¢ÇÈ");
+            putItemRequest = new PutItemRequest(tableName, item);
+            putItemResult = dynamoDB.putItem(putItemRequest);
+            System.out.println("Result: " + putItemResult);
+             
             // Scan items for movies with a year attribute greater than 1985
             HashMap<String, Condition> scanFilter = new HashMap<String, Condition>();
             Condition condition = new Condition()
@@ -155,12 +160,12 @@ public class AmazonDynamoDBSample {
         }
     }
 
-    private static Map<String, AttributeValue> newItem(String name, int year, String rating, String... fans) {
+    private static Map<String, AttributeValue> newItem(String Language, int Difficulty, String Structure, String Example) {
         Map<String, AttributeValue> item = new HashMap<String, AttributeValue>();
-        item.put("name", new AttributeValue(name));
-        item.put("year", new AttributeValue().withN(Integer.toString(year)));
-        item.put("rating", new AttributeValue(rating));
-        item.put("fans", new AttributeValue().withSS(fans));
+        item.put("Language", new AttributeValue(Language));
+        item.put("Difficulty", new AttributeValue().withN(Integer.toString(Difficulty)));
+        item.put("Structure", new AttributeValue(Structure));
+        item.put("Example", new AttributeValue(Example));
 
         return item;
     }
