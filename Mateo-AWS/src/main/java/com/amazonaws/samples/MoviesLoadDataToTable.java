@@ -47,7 +47,7 @@ public class MoviesLoadDataToTable {
         }
         AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard()
         	.withCredentials(credentialsProvider)
-            .withRegion("us-west-1")
+            .withRegion("us-west-2")
             .build();
 
         DynamoDB dynamoDB = new DynamoDB(client);
